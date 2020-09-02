@@ -1,5 +1,11 @@
 # web-app
 
+___________________________________________________
+
+Firebase site: https://bagelstore.web.app/
+___________________________________________________
+
+
 ## Project setup
 ```
 npm install
