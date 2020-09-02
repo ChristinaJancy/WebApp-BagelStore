@@ -1,9 +1,18 @@
 <template>
   <div id="Navigation">
-
     <v-navigation-drawer v-model="drawer" app dark clipped>
-
       <v-list dense>
+        <router-link to="/">
+          <v-list-item class="px-2">
+            <v-list-item-avatar>
+              <v-img src="../assets/bagelshop/bagel.jpg"></v-img>
+            </v-list-item-avatar>
+            <v-list-item-title>Home page</v-list-item-title>
+          </v-list-item>
+        </router-link>
+
+        <hr style="border:0.1px solid grey" />
+
         <router-link to="/about">
           <v-list-item link>
             <v-list-item-action>
@@ -15,14 +24,16 @@
           </v-list-item>
         </router-link>
 
-        <v-list-item link>
-          <v-list-item-action>
-            <v-icon class="navdrawer--text">mdi-cog</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title class="navdrawer--text">Settings</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <router-link to="/menu">
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon class="navdrawer--text">mdi-silverware</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="navdrawer--text">Menu</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app clipped-left light>
@@ -61,5 +72,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

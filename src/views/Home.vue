@@ -56,17 +56,6 @@ export default {
 
 <style lang="scss" scoped>
 
-$colorz: (
-    primary: #1976D2,
-    secondary: #424242,
-    accent: #82B1FF,
-    error: #FF5252,
-    info: #2196F3,
-    success: #4CAF50,
-    warning: #FFC107,
-    white: #fff,
-);
-
 @mixin infobox_mixin($border-radius, $border-color, $padding, $margin-bottom, $color){
     border:$border-radius solid $border-color;
     padding:$padding;
