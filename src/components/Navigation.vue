@@ -34,13 +34,35 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
+
+        <router-link to="/login">
+          <v-list-item link>
+            <v-list-item-action>
+              <v-icon class="navdrawer--text">mdi-account-circle-outline</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="navdrawer--text">Login</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+
+        <router-link to="/admin">
+          <v-list-item link style="position:fixed;bottom:0px; width:100%;">
+            <v-list-item-action>
+              <v-icon class="navdrawer--text">mdi-lock</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class="navdrawer--text">Admin</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar app clipped-left light>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <router-link to="/">
         <v-tool-bar-title>
-          <span class="font-weight-black title--text h1">BAGELS BY </span>
+          <span class="font-weight-black title--text h1">BAGELS BY</span>
           <span class="font-weight-light title--text h1">Chris</span>
         </v-tool-bar-title>
       </router-link>

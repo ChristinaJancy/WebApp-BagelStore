@@ -104,89 +104,35 @@
 </template>
 
 <script>
+import { dbMenuAdd } from '../../firebase.js'
+
 export default {
   data() {
     return {
       basket: [],
       menuItems: [
-        {
-          name: "Health potion",
-          description: "this is a product",
-          price: 232,
-        },
-        {
-          name: "Mana potion",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Stamina potion",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Armor helmet",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Armor chainmill",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Armor pants",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Great sword",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Great staff",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Great wand",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Penguin",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Cat",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Fish with legs",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Cerberus",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Big cat",
-          description: "this is a product",
-          price: 23,
-        },
-        {
-          name: "Sheep",
-          description: "this is a product",
-          price: 29,
-        },
+        // {
+        //   name: "Bagel bagel",
+        //   description: "Best one so far",
+        //   price: 70,
+        // },
       ],
-    };
+    }
   },
+      created(){
+      dbMenuAdd.get().then((querySnapshot) => {
+        querySnapshot.forEach((doc =>{
+          // console.log(doc.id, " => ", doc.data());
+          var menuItemData = doc.data();
+            this.menuItems.push({
+              id: doc.id,
+              name: menuItemData.name,
+              description: menuItemData.description,
+              price: menuItemData.price
+            })
+        }))
+      })
+    },
   methods: {
     addToBasket(item) {
       if (this.basket.find((itemInArray) => item.name === itemInArray.name)) {
