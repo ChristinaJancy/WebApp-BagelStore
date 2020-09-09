@@ -31,7 +31,7 @@
                       <!--Add to basket - left side-->
                       <td>
                         <v-btn @click="addToBasket(item)" depressed text small>
-                          <v-icon color="navdrawer">mdi-plus</v-icon>
+                          <v-icon color="iconcolor">mdi-plus</v-icon>
                         </v-btn>
                       </td>
                     </tr>
@@ -54,9 +54,9 @@
                   <tbody>
                     <tr v-for="item in basket" :key="item.name">
                       <td>
-                        <v-icon small color="navdrawer" @click="increaseQnt(item)">mdi-plus</v-icon>
+                        <v-icon small color="iconcolor" @click="increaseQnt(item)">mdi-plus</v-icon>
                         {{ item.quantity}}
-                        <v-icon small color="navdrawer" @click="decreaseQnt(item)">mdi-minus</v-icon>
+                        <v-icon small color="iconcolor" @click="decreaseQnt(item)">mdi-minus</v-icon>
                       </td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.price }}</td>
@@ -91,7 +91,7 @@
                 </v-row>
                 <v-row style="margin:0">
                   <v-spacer></v-spacer>
-                  <v-btn dark class="navdrawer">Checkout</v-btn>
+                  <v-btn dark class="orangebtn">Checkout</v-btn>
                 </v-row>
               </div>
             </v-col>
@@ -103,13 +103,13 @@
   </section>
 </template>
 
-<script>
+<script scoped>
 import { dbMenuAdd } from '../../firebase.js'
 
 export default {
   data() {
     return {
-      basket: [],
+      basketDump: [],
       menuItems: [
         // {
         //   name: "Bagel bagel",
@@ -135,18 +135,26 @@ export default {
     },
   methods: {
     addToBasket(item) {
-      if (this.basket.find((itemInArray) => item.name === itemInArray.name)) {
-        item = this.basket.find(
-          (itemInArray) => item.name === itemInArray.name
-        );
-        this.increaseQnt(item);
-      } else {
-        this.basket.push({
+      // if (this.basket.find((itemInArray) => item.name === itemInArray.name)) {
+      //   item = this.basket.find(
+      //     (itemInArray) => item.name === itemInArray.name
+      //   );
+      //   this.increaseQnt(item);
+      // } else {
+      //   this.basket.push({
+      //     name: item.name,
+      //     price: item.price,
+      //     quantity: 1,
+      //   });
+      // }
+       this.basketDump.push({
           name: item.name,
           price: item.price,
-          quantity: 1,
+          quantity: 1
         });
-      }
+        this.$store.commit('addBasketItems', this.basketDump);
+        // console.log("what is this", this.basketDump);
+        this.basketDump = [];
     },
     increaseQnt(item) {
       item.quantity++;
@@ -160,6 +168,10 @@ export default {
     },
   },
   computed: {
+    basket(){ //for vuex
+      // return this.$store.state.basketItems //we want to contact state in our vuex store
+      return this.$store.getters.getBasketItems
+    },
       subTotal() {
           var subCost = 0;
           for(var items in this.basket){

@@ -19,7 +19,8 @@ export default new Vuetify({
           warning: '#FFC107',
           title: '#00000',
           infobox:'#ffffff',
-          navdrawer:'#ff462e',
+          iconcolor:'#FF6E40',
+          orangebtn:'#FF3D00',
         },
         dark: {
           primary: '#1976D2',
@@ -31,7 +32,8 @@ export default new Vuetify({
           warning: '#FFC107',
           title: '#ffffff',
           infobox:'#ffffff',
-          navdrawer:'#ff462e',
+          iconcolor:'#FF6E40',
+          orangebtn:'#FF3D00',
         },
         
       },

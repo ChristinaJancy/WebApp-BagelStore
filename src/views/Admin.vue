@@ -5,44 +5,44 @@
       src="../assets/bagelshop/bagel-back.jpg"
       cover
     >
-      <v-theme-provider dark>
+      <v-theme-provider light>
         <v-container>
           <v-row>
+        
             <v-col offset-md="1" md="5">
               <h1>All Items</h1>
               <div class="pa-2" id="info">
                 <v-simple-table id="menu-table" light>
                   <thead>
+                   
+                    <v-btn small text to="/addnew">
+                      <v-icon color="iconcolor">mdi-plus</v-icon>
+                      <span style="padding:0 10px;">Add Item</span>
+                    </v-btn>
+                   
                     <tr>
-                      <th class="text-left" style="width:70%;">
-                        Name
-                        <v-btn small text to="/addnew">
-                          <v-icon color="navdrawer">mdi-plus</v-icon>
-                          <span style="padding:0 10px;">Add Item</span>
-                        </v-btn>
-                      </th>
-                      <th class="text-left" style="width=100%;">Price</th>
-                      <th class="text-left" style="width=100%">Edit</th>
-                      <th class="text-left" style="width=100%">Remove</th>
+                      <th class="text-left" style="width:70%;">Name</th>
+                      <th class="text-left" style="width=100px">Price</th>
+                      <th class="text-left" style="width=100px">Edit</th>
+                      <th class="text-left" style="width=100px">Remove</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="item in menuItems" :key="item.name">
                       <td>
-                        <span id="td_name">{{item.name}}</span>
-                        <br />
+                        <span id="td_name">{{item.name}}</span> <br />
                         <span id="menu_item_description">{{item.description}}</span>
                       </td>
                       <td>{{ item.price }}</td>
 
                       <td>
                         <v-btn depressed text small>
-                          <v-icon color="navdrawer">mdi-pen</v-icon>
+                          <v-icon color="iconcolor">mdi-pen</v-icon>
                         </v-btn>
                       </td>
                       <td>
                         <v-btn @click="deleteItem(item.id)" depressed text small>
-                          <v-icon color="navdrawer">mdi-delete</v-icon>
+                          <v-icon color="iconcolor">mdi-delete</v-icon>
                         </v-btn>
                       </td>
                     </tr>
@@ -59,35 +59,39 @@
         </v-container>
       </v-theme-provider>
     </v-img>
-    <!-- <v-parallax :height="$vuetify.breakpoint.smAndDown ? 300 : 300" src="../assets/home/home.jpg"></v-parallax> -->
   </section>
 </template>
 
-<script>
+<script scoped>
 import { dbMenuAdd } from "../../firebase.js";
 
 export default {
   data() {
     return {
       basket: [],
-      menuItems: [],
     };
   },
-  created() {
-    dbMenuAdd.get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.id, " => ", doc.data());
-        var menuItemData = doc.data();
-        this.menuItems.push({
-          id: doc.id,
-          name: menuItemData.name,
-          description: menuItemData.description,
-          price: menuItemData.price,
-        });
-      });
-    });
+  beforeCreated(){
+    this.$store.dispatch('setMenuItems')
   },
-  methods: {
+    //     created(){
+    //   dbMenuAdd.get().then((querySnapshot) => {
+    //     querySnapshot.forEach((doc =>{
+    //       // console.log(doc.id, " => ", doc.data());
+    //       var menuItemData = doc.data();
+    //         this.menuItems.push({
+    //           id: doc.id,
+    //           name: menuItemData.name,
+    //           description: menuItemData.description,
+    //           price: menuItemData.price
+    //         })
+    //     }))
+    //   })
+    // },
+   methods: {
+    editItem(){
+      
+    },
     deleteItem(id){ //we want to target/grab the id
         dbMenuAdd.doc(id).delete().then(function() {
           console.log("Document successfully deleted!");
@@ -121,6 +125,9 @@ export default {
     },
   },
   computed: {
+    menuItems(){
+      return this.$store.getters.getMenuItems
+    },
     subTotal() {
       var subCost = 0;
       for (var items in this.basket) {

@@ -39,11 +39,10 @@
           </v-container>
         </v-theme-provider>
       </v-img>
-    <!-- <v-parallax :height="$vuetify.breakpoint.smAndDown ? 300 : 300" src="../assets/home/home.jpg"></v-parallax> -->
   </section>
 </template>
 
-<script>
+<script scoped>
 export default {
   name: "Home",
   show: true,
@@ -55,6 +54,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 
 @mixin infobox_mixin($border-radius, $border-color, $padding, $margin-bottom, $color){
     border:$border-radius solid $border-color;
