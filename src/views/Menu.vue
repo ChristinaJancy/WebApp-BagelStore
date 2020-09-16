@@ -14,6 +14,7 @@
                 <v-simple-table id="menu-table" light>
                   <thead>
                     <tr>
+                      <th></th>
                       <th class="text-left" style="width=70%;">Products</th>
                       <th class="text-left" style="width=100%">Price</th>
                       <th class="text-left" style="width=100%">Add to basket</th>
@@ -21,6 +22,9 @@
                   </thead>
                   <tbody>
                     <tr v-for="item in menuItems" :key="item.name">
+                      <td id="id_menuitem_img">
+                        <v-img v-bind:src="item.image"></v-img>
+                      </td>
                       <td>
                         <span id="td_name">{{item.name}}</span>
                         <br />
@@ -104,49 +108,27 @@
 </template>
 
 <script scoped>
+  /*eslint-disable*/
 import { dbMenuAdd } from '../../firebase.js'
 
 export default {
   data() {
     return {
       basketDump: [],
-      menuItems: [
-        // {
-        //   name: "Bagel bagel",
-        //   description: "Best one so far",
-        //   price: 70,
-        // },
-      ],
+      // menuItems: [
+      //   // {
+      //   //   name: "Bagel bagel",
+      //   //   description: "Best one so far",
+      //   //   price: 70,
+      //   // },
+      // ],
     }
   },
-      created(){
-      dbMenuAdd.get().then((querySnapshot) => {
-        querySnapshot.forEach((doc =>{
-          // console.log(doc.id, " => ", doc.data());
-          var menuItemData = doc.data();
-            this.menuItems.push({
-              id: doc.id,
-              name: menuItemData.name,
-              description: menuItemData.description,
-              price: menuItemData.price
-            })
-        }))
-      })
-    },
+    beforeCreate() {
+    this.$store.dispatch("setMenuItems");
+  },
   methods: {
     addToBasket(item) {
-      // if (this.basket.find((itemInArray) => item.name === itemInArray.name)) {
-      //   item = this.basket.find(
-      //     (itemInArray) => item.name === itemInArray.name
-      //   );
-      //   this.increaseQnt(item);
-      // } else {
-      //   this.basket.push({
-      //     name: item.name,
-      //     price: item.price,
-      //     quantity: 1,
-      //   });
-      // }
        this.basketDump.push({
           name: item.name,
           price: item.price,
@@ -171,6 +153,9 @@ export default {
     basket(){ //for vuex
       // return this.$store.state.basketItems //we want to contact state in our vuex store
       return this.$store.getters.getBasketItems
+    },
+     menuItems() {
+      return this.$store.getters.getMenuItems;
     },
       subTotal() {
           var subCost = 0;
@@ -235,6 +220,11 @@ tr th {
   font-weight: 300;
   color: black;
   font-size: 13px;
+}
+#id_menuitem_img{
+  max-width:40px;
+  max-height:40px;
+  padding:0;
 }
 
 .col h1 {

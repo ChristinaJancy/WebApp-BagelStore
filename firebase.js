@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage'
 
 //Your web app's Firebase configuration
   var firebaseConfig = {
@@ -12,7 +13,7 @@ import 'firebase/firestore'
     appId: "1:324551223032:web:90ef277aea9341ceb6bd0d"
   };
   // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+export const fb = firebase.initializeApp(firebaseConfig);
 
 export const db = firebase.firestore()
 export const dbMenuAdd = db.collection('menuItems');

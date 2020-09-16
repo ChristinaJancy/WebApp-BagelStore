@@ -1,5 +1,22 @@
 <template>
   <section class="about">
+       <v-snackbar top
+      v-model="snackbar"
+      :multi-line="multiLine"
+    >
+      {{ itemAdded }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
     <v-img
       :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
       src="../../assets/bagelshop/bagel-back.jpg"
@@ -11,10 +28,20 @@
             <v-col offset-md="1" md="5">
               <h1>Add new item</h1>
               <div class="pa-2" id="info">
-                <v-text-field label="Name of Bagel" required v-model="name"></v-text-field>
-                <v-text-field label="Description" required v-model="description"></v-text-field>
-                <v-text-field label="Price" required v-model="price"></v-text-field>
-                <v-btn color="success" class="black--text" depressed v-on:click="addNewMenuItem()">Add Item</v-btn>
+                <v-text-field clearable label="Name of Bagel" required v-model="name"></v-text-field>
+                <v-text-field clearable label="Description" required v-model="description"></v-text-field>
+                <v-text-field clearable label="Price" required v-model="price"></v-text-field>
+
+                <v-file-input label="File input" prepend-icon="mdi-camera" required @change="uploadImage"></v-file-input>
+
+                <v-btn
+                  color="success"
+                  class="black--text"
+                  depressed
+                  v-on:click="addNewMenuItem()"
+                  :disabled="btnDisable"
+                  @click="clear"
+                >Add Item</v-btn>
                 <v-btn color="error" class="black--text" depressed>Cancel</v-btn>
               </div>
             </v-col>
@@ -50,37 +77,61 @@
 </template>
 
 <script>
-import { dbMenuAdd } from '../../../firebase.js'
+import { dbMenuAdd, fb } from "../../../firebase.js";
+  /*eslint-disable*/
 
 export default {
   data() {
     return {
-    name: '',
-    description: '',
-    price: '',
-    // image: null, //var to store image url in
-    //btnDisable: true //disable btn before image is uploaded
-    
-    }
+      name: "",
+      description: "",
+      price: "",
+      image: null, //var to store image url in
+      btnDisable: true, //disable btn before image is uploaded
+      multiLine: true,
+      snackbar: false,
+      itemAdded: 'Item has been added to the menu',
+    };
   },
-  methods: {  
-    // uploadImage(e) { //e is event
-    //   //store file in variable
-    //    let file = e; 
-    //    console.log(file); //check console.log
-    // }, 
-     
-      addNewMenuItem (){
-        //debugger
-          dbMenuAdd.add({
-              name: this.name,
-              description: this.description,
-              price: this.price,
-              // image: this.image //Add new property 
-          })
-      }
-  }
-}
+  methods: {
+    uploadImage(e) { //e is event
+      let file = e;  //store file in variable
+      console.log(e); //check console.log
+      var storageRef = fb.storage().ref("products/" + file.name); 
+      let uploadTask = storageRef.put(file);
+
+      uploadTask.on("state_changed", (snapshot) => {},
+        (error) => {
+          //handle unsuccesful uploads
+        }, () => {
+          //Handle succesful uploads on complete
+          //For instance, get the download URL: https://firebasestorage.googleapis.com
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            this.image = downloadURL;
+            this.btnDisable = false;
+            console.log("File available", downloadURL);
+          });
+        }
+      );
+    },
+     clear () {
+       this.name = ''
+       this.description = ''
+       this.price = ''
+     },
+
+    addNewMenuItem() {
+      //debugger;
+      this.snackbar = true;
+      dbMenuAdd.add({
+        name: this.name,
+        description: this.description,
+        price: this.price,
+        image: this.image //Add new property
+      });
+    },
+  },
+};
 </script>
 
 

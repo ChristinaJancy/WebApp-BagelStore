@@ -1,5 +1,11 @@
 <template>
   <section class="about">
+    <v-snackbar v-model="snackbar" top :multi-line="multiLine">
+      {{ updatedText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+      </template>
+    </v-snackbar>
     <v-img
       :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
       src="../assets/bagelshop/bagel-back.jpg"
@@ -8,18 +14,16 @@
       <v-theme-provider light>
         <v-container>
           <v-row>
-        
             <v-col offset-md="1" md="5">
               <h1>All Items</h1>
               <div class="pa-2" id="info">
                 <v-simple-table id="menu-table" light>
                   <thead>
-                   
                     <v-btn small text to="/addnew">
                       <v-icon color="iconcolor">mdi-plus</v-icon>
                       <span style="padding:0 10px;">Add Item</span>
                     </v-btn>
-                   
+
                     <tr>
                       <th class="text-left" style="width:70%;">Name</th>
                       <th class="text-left" style="width=100px">Price</th>
@@ -30,13 +34,20 @@
                   <tbody>
                     <tr v-for="item in menuItems" :key="item.name">
                       <td>
-                        <span id="td_name">{{item.name}}</span> <br />
+                        <span id="td_name">{{item.name}}</span>
+                        <br />
                         <span id="menu_item_description">{{item.description}}</span>
                       </td>
                       <td>{{ item.price }}</td>
 
                       <td>
-                        <v-btn depressed text small>
+                        <v-btn
+                          depressed
+                          text
+                          small
+                          @click.stop="dialog = true"
+                          @click="editItem(item)"
+                        >
                           <v-icon color="iconcolor">mdi-pen</v-icon>
                         </v-btn>
                       </td>
@@ -56,6 +67,44 @@
               <div class="pa-2" id="info">Right</div>
             </v-col>
           </v-row>
+          <v-row>
+            <v-dialog v-model="dialog" max-width="400">
+              <v-card>
+                <v-row class="ma-0 pa-0">
+                  <v-col cols="12">
+                    <h1 class="black--text" style="text-align:center;">Edit item</h1>
+
+                    <div class="pa-2" id="info">
+                      <v-text-field label="Name" v-model="item.name"></v-text-field>
+                      <v-text-field label="Description" v-model="item.description"></v-text-field>
+                      <v-text-field label="price" v-model="item.price"></v-text-field>
+
+                      <v-row class="ma-0 pa-0">
+                        <v-col cols="6" align="left">
+                          <v-btn
+                            color="success"
+                            class="black--text"
+                            depressed
+                            v-on:click="updateItem()"
+                            @click.stop="dialog = false"
+                          >Edit Item</v-btn>
+                        </v-col>
+
+                        <v-col cols="6" align="right">
+                          <v-btn
+                            color="error"
+                            class="black--text"
+                            @click.stop="dialog = false"
+                            depressed
+                          >Close</v-btn>
+                        </v-col>
+                      </v-row>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-dialog>
+          </v-row>
         </v-container>
       </v-theme-provider>
     </v-img>
@@ -69,34 +118,60 @@ export default {
   data() {
     return {
       basket: [],
+      dialog: false,
+      item: [],
+      activeEditItem: null,
+      multiLine: true,
+      snackbar: false,
+      updatedText: "Menu item has been updated",
     };
   },
-  beforeCreated(){
-    this.$store.dispatch('setMenuItems')
+  beforeCreate() {
+    this.$store.dispatch("setMenuItems");
   },
-    //     created(){
-    //   dbMenuAdd.get().then((querySnapshot) => {
-    //     querySnapshot.forEach((doc =>{
-    //       // console.log(doc.id, " => ", doc.data());
-    //       var menuItemData = doc.data();
-    //         this.menuItems.push({
-    //           id: doc.id,
-    //           name: menuItemData.name,
-    //           description: menuItemData.description,
-    //           price: menuItemData.price
-    //         })
-    //     }))
-    //   })
-    // },
-   methods: {
-    editItem(){
-      
+
+  // created() {
+  //   dbMenuAdd.get().then((querySnapshot) => {
+  //     querySnapshot.forEach((doc) => {
+  //       // console.log(doc.id, " => ", doc.data());
+  //       var menuItemData = doc.data();
+  //       this.menuItems.push({
+  //         id: doc.id,
+  //         name: menuItemData.name,
+  //         description: menuItemData.description,
+  //         price: menuItemData.price,
+  //       });
+  //     });
+  //   });
+  // },
+
+  methods: {
+    editItem(item) {
+      this.item = item;
+      this.activeEditItem = item.id;
     },
-    deleteItem(id){ //we want to target/grab the id
-        dbMenuAdd.doc(id).delete().then(function() {
+    updateItem() {
+      dbMenuAdd
+        .doc(this.activeEditItem)
+        .update(this.item)
+        .then(() => {
+          this.snackbar = true;
+          console.log("it works!");
+        })
+        .catch(function (error) {
+          console.error("oh no, I got an error", error);
+        });
+    },
+    deleteItem(id) {
+      //we want to target/grab the id
+      dbMenuAdd
+        .doc(id)
+        .delete()
+        .then(function () {
           console.log("Document successfully deleted!");
-          }).catch(function(error) {
-            console.error("Error removing document: ", error);
+        })
+        .catch(function (error) {
+          console.error("Error removing document: ", error);
         });
     },
     addToBasket(item) {
@@ -125,8 +200,8 @@ export default {
     },
   },
   computed: {
-    menuItems(){
-      return this.$store.getters.getMenuItems
+    menuItems() {
+      return this.$store.getters.getMenuItems;
     },
     subTotal() {
       var subCost = 0;

@@ -7,6 +7,7 @@
       >
         <v-theme-provider dark>
           <v-container align="center" fill-height>
+            
               <v-row align="center" class="title--text ma-0">
                 <v-col class="text-left my-auto" cols="12" md="3" sm="12" xs="12" offset-md="10">
                   <h1 class="infobox-h1">Bagel Shop</h1>

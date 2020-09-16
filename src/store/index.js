@@ -57,7 +57,7 @@ export default new Vuex.Store({
       let menuItems = []
 
       dbMenuAdd.onSnapshot((snapshotItems) => {
-        menuItems = []
+       
         snapshotItems.forEach((doc) => {
           var menuItemData = doc.data();
           menuItems.push({
@@ -65,7 +65,10 @@ export default new Vuex.Store({
             id: doc.id
           })
         })
-        state.menuItems = menuItems
+        console.log(menuItems)
+        state.menuItems = menuItems;
+        menuItems = []
+
       }
     )}
   },
