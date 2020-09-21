@@ -112,8 +112,8 @@
 </template>
 
 <script scoped>
-import { dbMenuAdd } from "../../firebase.js";
-
+// import { dbMenuAdd } from "../../firebase.js";
+import { dbMenuAdd } from "../firebase.js";
 export default {
   data() {
     return {

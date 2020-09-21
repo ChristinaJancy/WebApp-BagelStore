@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import 'firebase/firestore'
-import { dbMenuAdd } from '../../firebase.js'
+// import { dbMenuAdd } from '../../firebase.js'
+import { dbMenuAdd } from '../firebase.js'
 /* eslint-disable */
 
 import firebase from 'firebase'

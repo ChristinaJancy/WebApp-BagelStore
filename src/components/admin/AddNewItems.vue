@@ -77,7 +77,8 @@
 </template>
 
 <script>
-import { dbMenuAdd, fb } from "../../../firebase.js";
+// import { dbMenuAdd, fb } from "../../../firebase.js";
+import { dbMenuAdd, fb } from "../../firebase.js";
   /*eslint-disable*/
 
 export default {

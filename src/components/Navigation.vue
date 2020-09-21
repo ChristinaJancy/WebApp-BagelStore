@@ -106,8 +106,8 @@
 
 <script>
 /* eslint-disable */
-import { db } from "../../firebase";
-
+// import { db } from "../../firebase";
+import { db } from "../firebase";
 import firebase from "firebase";
 import "firebase/firestore";
 import store from "../store/index.js";
